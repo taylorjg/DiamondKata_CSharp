@@ -44,13 +44,13 @@ namespace DiamondLib
 
         private static string FormatLineWithOneChar(char currentChar, string padding)
         {
-            return string.Format("{0}{1}{0}", padding, currentChar);
+            return padding + currentChar + padding;
         }
 
         private static string FormatLineWithTwoChars(char currentChar, string padding, int patternWidth)
         {
             var filling = (patternWidth - 2).ToSpaces();
-            return string.Format("{0}{1}{2}{1}{0}", padding, currentChar, filling);
+            return padding + currentChar + filling + currentChar + padding;
         }
     }
 }
