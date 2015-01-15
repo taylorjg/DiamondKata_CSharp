@@ -37,14 +37,20 @@ namespace DiamondLib
         private static string FormatLine(int squareSize, int patternWidth, char currentChar)
         {
             var padding = ((squareSize - patternWidth) / 2).ToSpaces();
-            if (patternWidth == 1) return string.Format("{0}{1}{0}", padding, currentChar);
-            var filling = (patternWidth - 2).ToSpaces();
-            return string.Format("{0}{1}{2}{1}{0}", padding, currentChar, filling);
+            return (patternWidth == 1)
+                ? FormatLineWithOneChar(currentChar, padding)
+                : FormatLineWithTwoChars(currentChar, padding, patternWidth);
         }
 
-        private static IEnumerable<T> Append<T>(this IEnumerable<T> xs, T x)
+        private static string FormatLineWithOneChar(char currentChar, string padding)
         {
-            return xs.Concat(new[]{x});
+            return string.Format("{0}{1}{0}", padding, currentChar);
+        }
+
+        private static string FormatLineWithTwoChars(char currentChar, string padding, int patternWidth)
+        {
+            var filling = (patternWidth - 2).ToSpaces();
+            return string.Format("{0}{1}{2}{1}{0}", padding, currentChar, filling);
         }
     }
 }
