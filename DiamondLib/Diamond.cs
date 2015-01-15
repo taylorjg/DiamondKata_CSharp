@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DiamondLib
 {
-    public class Diamond
+    public static class Diamond
     {
         private const char BaseChar = 'A';
 
@@ -12,12 +12,11 @@ namespace DiamondLib
         {
             var squareSize = CalculateSquareSize(inputChar);
             var tuples = GenerateTuples(squareSize);
-            return tuples.Aggregate(new List<string>(), (lines, tuple) =>
+            return tuples.Aggregate(Enumerable.Empty<string>(), (lines, tuple) =>
             {
                 var patternWidth = tuple.Item1;
                 var currentChar = tuple.Item2;
-                lines.Add(FormatLine(squareSize, patternWidth, currentChar));
-                return lines;
+                return lines.Append(FormatLine(squareSize, patternWidth, currentChar));
             });
         }
 
@@ -37,18 +36,15 @@ namespace DiamondLib
 
         private static string FormatLine(int squareSize, int patternWidth, char currentChar)
         {
-            string line;
-            var beforeAndAfterSpaces = ((squareSize - patternWidth) / 2).ToSpaces();
-            if (patternWidth > 1)
-            {
-                var centreSpaces = (patternWidth - 2).ToSpaces();
-                line = string.Format("{0}{1}{2}{1}{0}", beforeAndAfterSpaces, currentChar, centreSpaces);
-            }
-            else
-            {
-                line = string.Format("{0}{1}{0}", beforeAndAfterSpaces, currentChar);
-            }
-            return line;
+            var padding = ((squareSize - patternWidth) / 2).ToSpaces();
+            if (patternWidth == 1) return string.Format("{0}{1}{0}", padding, currentChar);
+            var filling = (patternWidth - 2).ToSpaces();
+            return string.Format("{0}{1}{2}{1}{0}", padding, currentChar, filling);
+        }
+
+        private static IEnumerable<T> Append<T>(this IEnumerable<T> xs, T x)
+        {
+            return xs.Concat(new[]{x});
         }
     }
 }
