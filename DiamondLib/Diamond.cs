@@ -11,9 +11,8 @@ namespace DiamondLib
         public static IEnumerable<string> GenerateLines(char inputChar)
         {
             var squareSize = CalculateSquareSize(inputChar);
-            var lines = new List<string>();
-
-            foreach (var tuple in GenerateTuples(squareSize))
+            var tuples = GenerateTuples(squareSize);
+            return tuples.Aggregate(new List<string>(), (lines, tuple) =>
             {
                 var patternWidth = tuple.Item1;
                 var currentChar = tuple.Item2;
@@ -27,9 +26,8 @@ namespace DiamondLib
                 {
                     lines.Add(string.Format("{0}{1}{0}", beforeAndAfterSpaces, currentChar));
                 }
-            }
-
-            return lines;
+                return lines;
+            });
         }
 
         private static int CalculateSquareSize(char inputChar)
