@@ -10,20 +10,23 @@ namespace DiamondLib
         {
             const char baseChar = 'A';
             var squareSize = ((inputChar - baseChar) * 2) + 1;
-            var increasingPatternWidths = Enumerable.Range(0, squareSize / 2 + 1).ToArray();
-            var decreasingPatternWidths = increasingPatternWidths.Reverse().Skip(1);
-            var patternWidths = increasingPatternWidths.Concat(decreasingPatternWidths);
+            var increasingTuples = Enumerable.Range(0, squareSize / 2 + 1)
+                .Select(i => Tuple.Create(i * 2 + 1, Convert.ToChar(baseChar + i)))
+                .ToArray();
+            var decreasingTuples = increasingTuples.Reverse().Skip(1);
+            var tuples = increasingTuples.Concat(decreasingTuples);
 
             var lines = new List<string>();
 
-            foreach (var patternWidth in patternWidths)
+            foreach (var tuple in tuples)
             {
-                var currentChar = Convert.ToChar(baseChar + patternWidth);
-                var numBeforeAndAfterSpaces = (squareSize / 2 - patternWidth);
+                var patternWidth = tuple.Item1;
+                var currentChar = tuple.Item2;
+                var numBeforeAndAfterSpaces = (squareSize - patternWidth) / 2;
                 var beforeAndAfterSpaces = numBeforeAndAfterSpaces.ToSpaces();
-                if (patternWidth > 0)
+                if (patternWidth > 1)
                 {
-                    var numCentreSpaces = squareSize - numBeforeAndAfterSpaces * 2 - 2;
+                    var numCentreSpaces = patternWidth - 2;
                     var centreSpaces = numCentreSpaces.ToSpaces();
                     lines.Add(string.Format("{0}{1}{2}{1}{0}", beforeAndAfterSpaces, currentChar, centreSpaces));
                 }
