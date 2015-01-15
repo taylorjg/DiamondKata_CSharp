@@ -16,16 +16,7 @@ namespace DiamondLib
             {
                 var patternWidth = tuple.Item1;
                 var currentChar = tuple.Item2;
-                var beforeAndAfterSpaces = ((squareSize - patternWidth) / 2).ToSpaces();
-                if (patternWidth > 1)
-                {
-                    var centreSpaces = (patternWidth - 2).ToSpaces();
-                    lines.Add(string.Format("{0}{1}{2}{1}{0}", beforeAndAfterSpaces, currentChar, centreSpaces));
-                }
-                else
-                {
-                    lines.Add(string.Format("{0}{1}{0}", beforeAndAfterSpaces, currentChar));
-                }
+                lines.Add(FormatLine(squareSize, patternWidth, currentChar));
                 return lines;
             });
         }
@@ -42,6 +33,22 @@ namespace DiamondLib
                 .ToArray();
             var decreasingTuples = increasingTuples.Reverse().Skip(1);
             return increasingTuples.Concat(decreasingTuples);
+        }
+
+        private static string FormatLine(int squareSize, int patternWidth, char currentChar)
+        {
+            string line;
+            var beforeAndAfterSpaces = ((squareSize - patternWidth) / 2).ToSpaces();
+            if (patternWidth > 1)
+            {
+                var centreSpaces = (patternWidth - 2).ToSpaces();
+                line = string.Format("{0}{1}{2}{1}{0}", beforeAndAfterSpaces, currentChar, centreSpaces);
+            }
+            else
+            {
+                line = string.Format("{0}{1}{0}", beforeAndAfterSpaces, currentChar);
+            }
+            return line;
         }
     }
 }
