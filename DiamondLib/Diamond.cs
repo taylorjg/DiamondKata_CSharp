@@ -9,34 +9,31 @@ namespace DiamondLib
         public static IEnumerable<string> GenerateLines(char inputChar)
         {
             const char baseChar = 'A';
-            var numRows = ((inputChar - baseChar) * 2) + 1;
-            var maxWidth = (numRows / 2) + 1;
-            var increasingWidths = Enumerable.Range(0, maxWidth);
-            var decreasingWidths = Enumerable.Range(0, maxWidth - 1).Reverse();
-            var widths = increasingWidths.Concat(decreasingWidths);
+            var squareSize = ((inputChar - baseChar) * 2) + 1;
+            var increasingPatternWidths = Enumerable.Range(0, squareSize / 2 + 1).ToArray();
+            var decreasingPatternWidths = increasingPatternWidths.Reverse().Skip(1);
+            var patternWidths = increasingPatternWidths.Concat(decreasingPatternWidths);
 
             var lines = new List<string>();
 
-            foreach (var width in widths)
+            foreach (var patternWidth in patternWidths)
             {
-                var currentChar = Convert.ToChar(baseChar + width);
-                string line;
-                var beforeAndAfterSpaces = new string(' ', maxWidth - width - 1);
-                if (width > 0)
+                var currentChar = Convert.ToChar(baseChar + patternWidth);
+                var numBeforeAndAfterSpaces = (squareSize / 2 - patternWidth);
+                var beforeAndAfterSpaces = numBeforeAndAfterSpaces.ToSpaces();
+                if (patternWidth > 0)
                 {
-                    var centreSpaces = new string(' ', (width - 1) * 2 + 1);
-                    line = string.Format("{0}{1}{2}{1}{0}", beforeAndAfterSpaces, currentChar, centreSpaces);
+                    var numCentreSpaces = squareSize - numBeforeAndAfterSpaces * 2 - 2;
+                    var centreSpaces = numCentreSpaces.ToSpaces();
+                    lines.Add(string.Format("{0}{1}{2}{1}{0}", beforeAndAfterSpaces, currentChar, centreSpaces));
                 }
                 else
                 {
-                    line = string.Format("{0}{1}{0}", beforeAndAfterSpaces, currentChar);
+                    lines.Add(string.Format("{0}{1}{0}", beforeAndAfterSpaces, currentChar));
                 }
-                lines.Add(line);
             }
 
             return lines;
         }
-
-        // int.ToSpaces
     }
 }
